@@ -8,13 +8,13 @@ game.PlayScreen = me.ScreenObject.extend({
                 
                 me.levelDirector.loadLevel("level01");
 
-//                this.resetPlayer();
-//                
-//                me.input.bindKey(me.input.KEY.RIGHT, "right");
-//
-//		// add our HUD to the game world
-//		this.HUD = new game.HUD.Container();
-//		me.game.world.addChild(this.HUD);
+                this.resetPlayer();
+                
+                me.input.bindKey(me.input.KEY.RIGHT, "right");
+
+		// add our HUD to the game world
+		this.HUD = new game.HUD.Container();
+		me.game.world.addChild(this.HUD);
 	},
 
 
