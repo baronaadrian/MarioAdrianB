@@ -60,10 +60,13 @@ game.PlayerEntity = me.Entity.extend({
     },
 
     collideHandler: function(response){
-        
+       if(response.b.type === 'badguy'){
+           me.state.change(me.state.MENU);
+       } 
+     //return true; //makes the object solid
     }
-
-
+    
+    
 });
 
 game.LevelTrigger = me.Entity.extend({
@@ -115,8 +118,8 @@ game.BadGuy = me.Entity.extend({
         this.alive= true;
         this.type = "badguy";
         
-        //this.renderable.addAnimation("run", [0, 1, 2], 80);
-        //this.renderable.setCurrentAnimation("run");
+        this.renderable.addAnimation("run", [0, 1, 2], 80);
+        this.renderable.setCurrentAnimation("run");
        
        this.body.setVelocity(4, 6); 
       
@@ -134,7 +137,7 @@ game.BadGuy = me.Entity.extend({
         this.walkLeft = true;   
        }
        this.flipX(!this.walkLeft);
-       this.body.vel.x= (this .walkLeft) ? -this.body.accel.x * me.timer.tick : this.body.accel.x * me.timer.tick  
+       this.body.vel.x= (this .walkLeft) ? -this.body.accel.x * me.timer.tick : this.body.accel.x * me.timer.tick;
                                            //left side of colon makes it go left and right side of colon makes the BadGuy go right
      }else{
        me.game.world.removeChild(this);
