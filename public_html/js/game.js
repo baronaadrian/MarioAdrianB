@@ -10,7 +10,7 @@ var game = {
     // Run on page load.
     "onload": function() {
         // Initialize the video.
-        if (!me.video.init("screen", me.video.CANVAS, 1080, 860, true, 1.0)) {
+        if (!me.video.init("screen", me.video.CANVAS, 1060, 600, true, 1.0)) {
             alert("Your browser does not support HTML5 canvas.");
             return;
         
@@ -40,13 +40,16 @@ var game = {
     // Run on game resources loaded.
     "loaded": function() {
         me.pool.register("mario", game.PlayerEntity, true);
+        //this will be able to let put my mario into the game
         me.pool.register("BadGuy", game.BadGuy);
-        me.pool.register("mushroom", game.mushroom);
-       
+        //this will be able to let put my BadGuy into the game
+        me.pool.register("mushroom", game.Mushroom);
+        //this will be able to let put my mushroom into the game       
         me.pool.register("levelTrigger", game.LevelTrigger);
-
+        //this will be able to let mario go through the door
         me.state.set(me.state.MENU, new game.TitleScreen());
         me.state.set(me.state.PLAY, new game.PlayScreen());
+        //this will start up my start screen and my play screen
 
         // Start the game.
         me.state.change(me.state.MENU);

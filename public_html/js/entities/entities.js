@@ -14,12 +14,14 @@ game.PlayerEntity = me.Entity.extend({
 
         this.renderable.addAnimation("idle", [3]);
         //createan animiation valled smallWalk using pictuures of the image defined above (mario)
-        //sets the animation to run through pictuures 8-13
+        //sets the animation to run through pictures 8-13
         //the last number says we switch between pictures every 80 milliseconds
         this.renderable.addAnimation("bigIdle", [19]);
+        //this is so when he eats the mushroom this is the idle so he'll get big
         this.renderable.addAnimation("smallWalk", [8, 9, 10, 11, 12, 13], 80);
+        //this is for when he walks and the animation will change thats what these numbers are for
         this.renderable.addAnimation("bigWalk", [14, 15, 16, 17, 18, 19], 80);
-
+        //this is for when he walks and the animation will change once he eats the mushroom  
         this.renderable.setCurrentAnimation("idle");
         
         this.big = false;
@@ -83,7 +85,7 @@ game.PlayerEntity = me.Entity.extend({
         console.log(ydif);
         
            if(response.b.type === 'badguy'){
-         if(ydif <= -155){
+         if(ydif <= -115){
               response.b.alive = false; 
       }else{
           me.state.change(me.state.MENU);
@@ -112,6 +114,7 @@ game.LevelTrigger = me.Entity.extend({
       this.body.setCollisionMask(me.collision.types.NO_OBJECT); 
       me.levelDirector.loadLevel(this.level);
       me.state.current().resetPlayer(this.xSpawn, this.ySpawn);
+      //this will change where the player will spawn  
     }
     
 });
@@ -144,10 +147,11 @@ game.BadGuy = me.Entity.extend({
         this.type = "badguy";
         
         this.renderable.addAnimation("run", [0, 1, 2], 80);
+        //this will be the animation for the badguy so he can walk or slide whatever he does just like the player
         this.renderable.setCurrentAnimation("run");
        
-       this.body.setVelocity(4, 6); 
-      
+       this.body.setVelocity(4, 6);
+            
    }, 
    
    update:function(delta){
@@ -156,6 +160,7 @@ game.BadGuy = me.Entity.extend({
        me.collision.check(this, true, this.collideHandler.bind(this), true);
    
    if(this.alive){
+       //this will change the direction of the badguy to go left or right
        if(this.walkLeft && this.pos.x <= this.startX){
            this.walkLeft = false;
        }else if(!this.walkLeft && this.pos.x >= this.endX){

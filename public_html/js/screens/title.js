@@ -5,6 +5,7 @@ game.TitleScreen = me.ScreenObject.extend({
 	onResetEvent: function() {
 		me.game.world.addChild( new me.Sprite(0, 0, me.loader.getImage('title-screen')), -10);
                me.input.bindKey(me.input.KEY.ENTER, "start");
+               //once i press enter it send me to my mario game
                
                me.game.world.addChild(new (me.Renderable.extend({
                    init: function(){
@@ -14,8 +15,10 @@ game.TitleScreen = me.ScreenObject.extend({
                    },
                    
                    draw:function(renderer){
-                       this.font.draw(renderer.getContext(), "Marioish", 450, 130);
+                       this.font.draw(renderer.getContext(), "ADRIAN", 450, 130);
+                       //this will be what it will say on my title screen
                        this.font.draw(renderer.getContext(), "PRESS ENTER TO PLAY!", 250,530);
+                       //this tells you how to start up the game 
                    }
                    
                })));
