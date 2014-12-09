@@ -16,11 +16,13 @@ game.PlayerEntity = me.Entity.extend({
         //createan animiation valled smallWalk using pictuures of the image defined above (mario)
         //sets the animation to run through pictuures 8-13
         //the last number says we switch between pictures every 80 milliseconds
+        this.renderable.addAnimation("bigIdle", [19]);
         this.renderable.addAnimation("smallWalk", [8, 9, 10, 11, 12, 13], 80);
+        this.renderable.addAnimation("bigWalk", [14, 15, 16, 17, 18, 19], 80);
 
         this.renderable.setCurrentAnimation("idle");
-
-
+        
+        this.big = false;
         //sets the speed we go on the x axis(first number) and y axis(second number)
         this.body.setVelocity(5, 20);
         
@@ -41,37 +43,60 @@ game.PlayerEntity = me.Entity.extend({
             this.body.vel.x = 0;
         }
                 if (me.input.isKeyPressed("up")){ 
-                this.body.vel.y -= this.body.accel.y * me.timer.tick;
-           }
+                  if(!this.body.jumping && !this.body.falling){
+                  this.body.jumping = true;
+                  this.body.vel.y -= this.body.accel.y * me.timer.tick;
+                  }
+               }
+               
           this.body.update(delta);
             me.collision.check(this, true, this.collideHandler.bind(this), true);
        
-        if (this.body.vel.x !== 0){
-               
-            if (!this.renderable.isCurrentAnimation("smallWalk")) {
-                this.renderable.setCurrentAnimation("smallWalk");
-                this.renderable.setAnimationFrame();
-                }
+        if(!this.big){
+            if (this.body.vel.x !== 0){
+                    if (!this.renderable.isCurrentAnimation("smallWalk")) {
+                    this.renderable.setCurrentAnimation("smallWalk");
+                    this.renderable.setAnimationFrame();
+                    }
+            }else{
+                this.renderable.setCurrentAnimation("idle");
+            }
         }else{
-            this.renderable.setCurrentAnimation("idle");
+          if (this.body.vel.x !== 0){
+                    if (!this.renderable.isCurrentAnimation("bigWalk")) {
+                    this.renderable.setCurrentAnimation("bigWalk");
+                    this.renderable.setAnimationFrame();
+                    }
+            }else{
+                this.renderable.setCurrentAnimation("bigIdle");
+            }  
         }
-        this._super(me.Entity, "update", [delta]);
+        
+        
+       this._super(me.Entity, "update", [delta]);
         return true;
+       //return true; //makes the object solid
     },
 
     collideHandler: function(response){
-       if(response.b.type === 'badguy'){
-           me.state.change(me.state.MENU);
-       } 
-     //return true; //makes the object solid
-    }
-    
-    
-});
+        var ydif = this.pos.y - response.b.pos.y;
+        console.log(ydif);
+        
+           if(response.b.type === 'badguy'){
+         if(ydif <= -155){
+              response.b.alive = false; 
+      }else{
+          me.state.change(me.state.MENU);
+        }
+       }else if(response.b.type === 'mushroom'){
+           this.big = true;
+            me.game.world.removeChild(response.b);
+         }
+       }
+     });
 
 game.LevelTrigger = me.Entity.extend({
-    init:function(x, y, settings){
-     //   
+    init:function(x, y, settings){ 
      this._super(me.Entity, 'init', [x, y, settings]); 
      //if something collides with this object then we will call the onCollision function and pass it
     //a hidden parameter of this object
@@ -152,4 +177,23 @@ game.BadGuy = me.Entity.extend({
       return true;   
     }
     
+ });
+
+game.Mushroom = me.Entity.extend({
+        init: function(x, y, settings){
+            this._super(me.Entity, 'init', [x, y, {
+                image: "mushroom",
+                spritewidth: "64",
+                spriteheight: "64",
+                width: 64,
+                height: 64,
+                getShape: function() {
+                    return (new me.Rect(0, 0, 64, 64)).toPolygon();
+                }
+            }]);
+        
+        me.collision.check(this);
+        this.type = "mushroom";
+        }
+        
 });
