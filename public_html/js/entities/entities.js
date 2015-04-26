@@ -44,6 +44,8 @@ game.PlayerEntity = me.Entity.extend({
         }else{
             this.body.vel.x = 0;
         }
+        
+        
                 if (me.input.isKeyPressed("up")){ 
                   if(!this.body.jumping && !this.body.falling){
                   this.body.jumping = true;
